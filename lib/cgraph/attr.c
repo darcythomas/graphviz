@@ -258,7 +258,6 @@ static Agsym_t *getattr(Agraph_t * g, int kind, char *name)
 
 static void unviewsubgraphsattr(Agraph_t *parent, char *name)
 {
-    agerr(AGWARN, "start the machine\n");
     Agraph_t *subg;
     Agsym_t *psym, *lsym;
     Dict_t *ldict;
