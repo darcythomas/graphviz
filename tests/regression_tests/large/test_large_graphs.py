@@ -36,8 +36,9 @@ def test_long_chain():
 
     graph.render("long_chain")
   """
+  input = Path(__file__).parent / "long_chain"
   subprocess.check_call([
-    "dot", "-Tsvg", "-O", os.devnull
+    "dot", "-Tsvg", "-O", input
   ])
 
 def test_wide_clusters():
