@@ -5,7 +5,6 @@ Tests of large and/or expensive graphs.
 import os
 from pathlib import Path
 import platform
-import subprocess
 import sys
 import pytest
 
@@ -37,9 +36,7 @@ def test_long_chain():
     graph.render("long_chain")
   """
   input = Path(__file__).parent / "long_chain"
-  subprocess.check_call([
-    "dot", "-Tsvg", "-O", input
-  ])
+  dot("svg", input)
 
 def test_wide_clusters():
   """
