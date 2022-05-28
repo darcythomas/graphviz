@@ -276,7 +276,6 @@ static void init(int argc, char *argv[])
 	Files[j] = argv[i] ? argv[i] : "-";
 	j++;
     }
-    Nodes[j] = Files[j] = NULL;
 }
 
 static Agraph_t *gread(FILE * fp)
