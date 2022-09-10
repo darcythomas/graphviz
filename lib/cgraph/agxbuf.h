@@ -67,6 +67,17 @@ static inline size_t agxblen(const agxbuf *xb) {
   return (size_t)(xb->ptr - xb->buf);
 }
 
+/// get the size of the backing memory of a buffer
+///
+/// In contrast to \p agxblen, this is the total number of usable bytes in the
+/// backing store, not the total number of currently stored bytes.
+///
+/// \param xb Buffer to operate on
+/// \return Number of usable bytes in the backing store
+static inline size_t agxbsizeof(const agxbuf *xb) {
+  return (size_t)(xb->eptr - xb->buf);
+}
+
 /* agxbpop:
  * Removes last character added, if any.
  */
@@ -89,7 +100,7 @@ static inline void agxbmore(agxbuf *xb, size_t ssz) {
   size_t nsize = 0; // new buffer size
   char *nbuf;       // new buffer
 
-  size = (size_t)(xb->eptr - xb->buf);
+  size = agxbsizeof(xb);
   nsize = size == 0 ? BUFSIZ : (2 * size);
   if (size + ssz > nsize)
     nsize = size + ssz;
@@ -140,7 +151,7 @@ static inline PRINTF_LIKE(2, 3) int agxbprint(agxbuf *xb, const char *fmt,
 
   // do we need to expand the buffer?
   {
-    size_t unused_space = (size_t)(xb->eptr - xb->ptr);
+    size_t unused_space = agxbsizeof(xb) - agxblen(xb);
     if (unused_space < size) {
       size_t extra = size - unused_space;
       agxbmore(xb, extra);
@@ -167,7 +178,7 @@ static inline size_t agxbput_n(agxbuf *xb, const char *s, size_t ssz) {
   if (ssz == 0) {
     return 0;
   }
-  if (xb->ptr + ssz > xb->eptr)
+  if (ssz > agxbsizeof(xb) - agxblen(xb))
     agxbmore(xb, ssz);
   memcpy(xb->ptr, s, ssz);
   xb->ptr += ssz;
@@ -188,7 +199,7 @@ static inline size_t agxbput(agxbuf *xb, const char *s) {
  *  int agxbputc(agxbuf*, char)
  */
 static inline int agxbputc(agxbuf *xb, char c) {
-  if (xb->ptr >= xb->eptr) {
+  if (agxblen(xb) >= agxbsizeof(xb)) {
     agxbmore(xb, 1);
   }
   *xb->ptr++ = c;
