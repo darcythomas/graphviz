@@ -16,14 +16,20 @@
 #include <stdio.h>
 #include <string.h>
 
+/// a description of where a buffer is located
+typedef enum {
+  AGXBUF_ON_HEAP = 0, ///< buffer is dynamically allocated
+  AGXBUF_ON_STACK     ///< buffer is statically allocated
+} agxbuf_loc_t;
+
 /* Extensible buffer:
  *  Malloc'ed memory is never released until agxbfree is called.
  */
 typedef struct {
-  char *buf;           // start of buffer
-  char *ptr;           // next place to write
-  char *eptr;          // end of buffer
-  int stack_allocated; // false if buffer is malloc'ed
+  char *buf;            ///< start of buffer
+  char *ptr;            ///< next place to write
+  char *eptr;           ///< end of buffer
+  agxbuf_loc_t located; ///< where does the backing memory for this buffer live?
 } agxbuf;
 
 /* agxbinit:
@@ -33,12 +39,12 @@ typedef struct {
 static inline void agxbinit(agxbuf *xb, unsigned int hint, char *init) {
   if (init != NULL) {
     xb->buf = init;
-    xb->stack_allocated = 1;
+    xb->located = AGXBUF_ON_STACK;
   } else {
     if (hint == 0) {
       hint = BUFSIZ;
     }
-    xb->stack_allocated = 0;
+    xb->located = AGXBUF_ON_HEAP;
     xb->buf = (char *)gv_calloc(hint, sizeof(char));
   }
   xb->eptr = xb->buf + hint;
@@ -50,7 +56,7 @@ static inline void agxbinit(agxbuf *xb, unsigned int hint, char *init) {
  * Free any malloced resources.
  */
 static inline void agxbfree(agxbuf *xb) {
-  if (!xb->stack_allocated)
+  if (xb->located == AGXBUF_ON_HEAP)
     free(xb->buf);
 }
 
@@ -80,12 +86,12 @@ static inline void agxbmore(agxbuf *xb, size_t ssz) {
   if (size + ssz > nsize)
     nsize = size + ssz;
   cnt = (size_t)(xb->ptr - xb->buf);
-  if (!xb->stack_allocated) {
+  if (xb->located == AGXBUF_ON_HEAP) {
     nbuf = (char *)gv_recalloc(xb->buf, size, nsize, sizeof(char));
   } else {
     nbuf = (char *)gv_calloc(nsize, sizeof(char));
     memcpy(nbuf, xb->buf, cnt);
-    xb->stack_allocated = 0;
+    xb->located = AGXBUF_ON_HEAP;
   }
   xb->buf = nbuf;
   xb->ptr = xb->buf + cnt;
@@ -226,7 +232,7 @@ static inline char *agxbnext(agxbuf *xb) { return xb->ptr; }
 static inline char *agxbdisown(agxbuf *xb) {
   char *buf;
 
-  if (xb->stack_allocated) {
+  if (xb->located == AGXBUF_ON_STACK) {
     // the buffer is not dynamically allocated, so we need to copy its contents
     // to heap memory
 
@@ -241,7 +247,7 @@ static inline char *agxbdisown(agxbuf *xb) {
 
   // reset xb to a state where it is usable
   xb->buf = xb->ptr = xb->eptr = NULL;
-  xb->stack_allocated = 0;
+  xb->located = AGXBUF_ON_HEAP;
 
   return buf;
 }
