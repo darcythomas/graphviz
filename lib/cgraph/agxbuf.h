@@ -14,6 +14,7 @@
 #include <cgraph/alloc.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -29,30 +30,35 @@ typedef enum {
 /// Malloc'ed memory is never released until \p agxbdisown or \p agxbfree is
 /// called.
 ///
-/// This has the following layout assuming x86-64 and that \p agxbuf_loc_t is
-/// backed by an int:
+/// This has the following layout assuming x86-64:
 ///
-///   ┌───────────────┬───────────────┬───────────────┬───────┬───────┐
-///   │      buf      │      ptr      │     eptr      │       │       │
-///   ├───────────────┴───────────────┴───────────────┤located│padding│
-///   │                     store                     │       │       │
-///   └───────────────────────────────────────────────┴───────┴───────┘
-///   0               8               16              24      28      32
+///                                                                  located
+///                                                                  ↓
+///   ┌───────────────┬───────────────┬───────────────┬──────────────┬┐
+///   │      buf      │      ptr      │     eptr      │    unused    ││
+///   ├───────────────┴───────────────┴───────────────┴──────────────┴┤
+///   │                             store                             │
+///   └───────────────────────────────────────────────────────────────┘
+///   0               8               16              24              32
 ///
 /// \p buf, \p ptr, and \p eptr are in use when \p located is \p AGXBUF_ON_HEAP
 /// or \p AGXBUF_ONSTACK. \p store is in use when \p located is
-/// \p AGXBUF_INLINE.
+/// \p AGXBUF_INLINE. Note that \p located actually _overlaps_ with \p store.
+/// This works because \p store is consistently NUL terminated. That is, when
+/// \p located is \p AGXBUF_INLINE (0), byte 31 actually serves as _both_
+/// \p located and possibly a NUL terminator.
 typedef struct {
   union {
     struct {
-      char *buf;  ///< start of buffer
-      char *ptr;  ///< next place to write
-      char *eptr; ///< end of buffer
+      char *buf;                       ///< start of buffer
+      char *ptr;                       ///< next place to write
+      char *eptr;                      ///< end of buffer
+      char unused[sizeof(char *) - 1]; ///< padding
+      uint8_t located; ///< where does the backing memory for this buffer live?
     };
     char store[sizeof(char *) *
-               3]; ///< inline storage used when \p located is \p AGXBUF_INLINE
+               4]; ///< inline storage used when \p located is \p AGXBUF_INLINE
   };
-  agxbuf_loc_t located; ///< where does the backing memory for this buffer live?
 } agxbuf;
 
 /* agxbinit:
@@ -86,8 +92,6 @@ static inline void agxbfree(agxbuf *xb) {
  */
 static inline size_t agxblen(const agxbuf *xb) {
   if (xb->located == AGXBUF_INLINE) {
-    assert(xb->store[sizeof(xb->store) - 1] == '\0' &&
-           "unterminated inline buffer");
     return strlen(xb->store);
   }
   return (size_t)(xb->ptr - xb->buf);
@@ -102,8 +106,6 @@ static inline size_t agxblen(const agxbuf *xb) {
 /// \return Number of usable bytes in the backing store
 static inline size_t agxbsizeof(const agxbuf *xb) {
   if (xb->located == AGXBUF_INLINE) {
-    assert(xb->store[sizeof(xb->store) - 1] == '\0' &&
-           "unterminated inline buffer");
     return sizeof(xb->store) - 1;
   }
   return (size_t)(xb->eptr - xb->buf);
