@@ -19,9 +19,9 @@
 
 /// a description of where a buffer is located
 typedef enum {
-  AGXBUF_ON_HEAP = 0, ///< buffer is dynamically allocated
-  AGXBUF_ON_STACK,    ///< buffer is statically allocated
-  AGXBUF_INLINE       ///< buffer is _within_ the containing agxbuf
+  AGXBUF_INLINE = 0, ///< buffer is _within_ the containing agxbuf
+  AGXBUF_ON_HEAP,    ///< buffer is dynamically allocated
+  AGXBUF_ON_STACK    ///< buffer is statically allocated
 } agxbuf_loc_t;
 
 /// extensible buffer
@@ -64,11 +64,9 @@ static inline void agxbinit(agxbuf *xb, unsigned int hint, char *init) {
     xb->buf = init;
     xb->located = AGXBUF_ON_STACK;
   } else {
-    if (hint == 0) {
-      hint = BUFSIZ;
-    }
-    xb->located = AGXBUF_ON_HEAP;
-    xb->buf = (char *)gv_calloc(hint, sizeof(char));
+    memset(xb->store, 0, sizeof(xb->store));
+    xb->located = AGXBUF_INLINE;
+    return;
   }
   xb->eptr = xb->buf + hint;
   xb->ptr = xb->buf;
@@ -362,8 +360,7 @@ static inline char *agxbdisown(agxbuf *xb) {
   }
 
   // reset xb to a state where it is usable
-  xb->buf = xb->ptr = xb->eptr = NULL;
-  xb->located = AGXBUF_ON_HEAP;
+  agxbinit(xb, 0, NULL);
 
   return buf;
 }
