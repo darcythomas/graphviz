@@ -687,16 +687,15 @@ static void writePort(Agedge_t * e, FILE * gxlFile, char *name)
     }
 }
 
-static int writeEdgeTest(Agraph_t * g, Agedge_t * e)
-{
+static bool writeEdgeTest(Agraph_t *g, Agedge_t *e) {
     Agraph_t *subg;
 
     /* can use agedge() because we subverted the dict compar_f */
     for (subg = agfstsubg(g); subg; subg = agnxtsubg(subg)) {
 	if (agsubedge(subg, e, FALSE))
-	    return FALSE;
+	    return false;
     }
-    return TRUE;
+    return true;
 }
 
 static void
