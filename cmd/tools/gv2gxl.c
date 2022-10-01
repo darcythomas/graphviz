@@ -692,7 +692,7 @@ static bool writeEdgeTest(Agraph_t *g, Agedge_t *e) {
 
     /* can use agedge() because we subverted the dict compar_f */
     for (subg = agfstsubg(g); subg; subg = agnxtsubg(subg)) {
-	if (agsubedge(subg, e, FALSE))
+	if (agsubedge(subg, e, false))
 	    return false;
     }
     return true;
