@@ -42,7 +42,6 @@
 #define GXL_LOC     "_gxl_locator_"
 
 #define GXL_COMP_LEN (SLEN(GXL_COMP))
-#define GXL_LOC_LEN  (SLEN(GXL_LOC))
 
 typedef struct {
     Agrec_t h;
@@ -179,7 +178,7 @@ static int isGxlGrammar(char *name)
 
 static int isLocatorType(char *name)
 {
-    return (strncmp(name, GXL_LOC, GXL_LOC_LEN) == 0);
+  return startswith(name, GXL_LOC);
 }
 
 static void *idexists(Dt_t * ids, char *id)
