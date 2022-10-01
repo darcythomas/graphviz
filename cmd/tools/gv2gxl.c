@@ -14,6 +14,7 @@
  *************************************************************************/
 
 #include <cgraph/alloc.h>
+#include <cgraph/startswith.h>
 #include <common/types.h>
 #include <common/utils.h>
 #include "convert.h"
@@ -173,7 +174,7 @@ static int xml_url_puts(FILE *f, const char *s) {
 
 static int isGxlGrammar(char *name)
 {
-    return (strncmp(name, GXL_ATTR, (sizeof(GXL_ATTR) - 1)) == 0);
+  return startswith(name, GXL_ATTR);
 }
 
 static int isLocatorType(char *name)
