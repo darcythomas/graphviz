@@ -26,6 +26,7 @@
 #include <cgraph/cghdr.h>
 #include <cgraph/exit.h>
 #include <cgraph/stack.h>
+#include <cgraph/startswith.h>
 
 typedef struct {
     Agrec_t h;
@@ -187,7 +188,7 @@ static void cntCluster(Agraph_t * g, Agobj_t * sg, void *arg)
 
     char *sgname = agnameof(sg);
 
-    if (strncmp(sgname, "cluster", 7) == 0)
+    if (startswith(sgname, "cluster"))
 	*(int *) (arg) += 1;
 }
 
