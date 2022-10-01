@@ -507,12 +507,11 @@ static void writeHdr(gxlstate_t *stp, Agraph_t *g, FILE *gxlFile, bool top) {
     AGATTRWF(g) = !(AGATTRWF(g));
 }
 
-static void writeTrl(Agraph_t * g, FILE * gxlFile, int top)
-{
+static void writeTrl(Agraph_t *g, FILE *gxlFile, bool top) {
     tabover(gxlFile);
     fprintf(gxlFile, "</graph>\n");
     Level--;
-    if (!(top) && agparent(g)) {
+    if (!top && agparent(g)) {
 	tabover(gxlFile);
 	fprintf(gxlFile, "</node>\n");
 	Level--;
@@ -527,7 +526,7 @@ static void writeSubgs(gxlstate_t * stp, Agraph_t * g, FILE * gxlFile)
     for (subg = agfstsubg(g); subg; subg = agnxtsubg(subg)) {
 	writeHdr(stp, subg, gxlFile, false);
 	writeBody(stp, subg, gxlFile);
-	writeTrl(subg, gxlFile, FALSE);
+	writeTrl(subg, gxlFile, false);
     }
 }
 
@@ -869,7 +868,7 @@ void gv_to_gxl(Agraph_t * g, FILE * gxlFile)
 
     writeHdr(stp, g, gxlFile, true);
     writeBody(stp, g, gxlFile);
-    writeTrl(g, gxlFile, TRUE);
+    writeTrl(g, gxlFile, true);
 
     fprintf(gxlFile, "</gxl>\n");
 
