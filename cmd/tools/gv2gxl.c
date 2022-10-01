@@ -19,6 +19,7 @@
 #include <common/utils.h>
 #include "convert.h"
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -430,7 +431,7 @@ writeDict(Agraph_t * g, FILE * gxlFile, char *name, Dict_t * dict,
 static void writeDicts(Agraph_t * g, FILE * gxlFile)
 {
     Agdatadict_t *def;
-    if ((def = agdatadict(g, FALSE))) {
+    if ((def = agdatadict(g, false))) {
 	writeDict(g, gxlFile, "graph", def->dict.g, 1);
 	writeDict(g, gxlFile, "node", def->dict.n, 0);
 	writeDict(g, gxlFile, "edge", def->dict.e, 0);
@@ -759,7 +760,7 @@ static void writeBody(gxlstate_t * stp, Agraph_t * g, FILE * gxlFile)
     Agedge_t *e;
 
     writeSubgs(stp, g, gxlFile);
-    Agdatadict_t *dd = agdatadict(g, FALSE);
+    Agdatadict_t *dd = agdatadict(g, false);
     for (n = agfstnode(g); n; n = agnxtnode(g, n)) {
 	realn = agidnode(stp->root, AGID(n), 0);
 	if (!writeval(realn)) {
