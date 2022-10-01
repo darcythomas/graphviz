@@ -850,7 +850,7 @@ static void freeState(gxlstate_t * stp)
 void gv_to_gxl(Agraph_t * g, FILE * gxlFile)
 {
     gxlstate_t *stp = initState(g);
-    aginit(g, AGNODE, "node", sizeof(Local_Agnodeinfo_t), TRUE);
+    aginit(g, AGNODE, "node", sizeof(Local_Agnodeinfo_t), true);
 
     iterateHdr(stp, g);
     iterateBody(stp, g);
