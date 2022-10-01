@@ -399,7 +399,7 @@ writeDict(Agraph_t * g, FILE * gxlFile, char *name, Dict_t * dict,
 	    }
 	} else {
 	    /* gxl attr; check for special cases like composites */
-	    if (strncmp(sym->name, GXL_COMP, GXL_COMP_LEN) == 0) {
+	    if (startswith(sym->name, GXL_COMP)) {
 		if (EMPTY(sym->defval)) {
 		    if (view == NULL)
 			continue;
