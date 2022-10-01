@@ -530,12 +530,8 @@ static void writeSubgs(gxlstate_t * stp, Agraph_t * g, FILE * gxlFile)
     }
 }
 
-static int writeEdgeName(Agedge_t * e, FILE * gxlFile)
-{
-    int rv;
-    char *p;
-
-    p = agnameof(e);
+static bool writeEdgeName(Agedge_t *e, FILE *gxlFile) {
+    char *p = agnameof(e);
     if (!(EMPTY(p))) {
 	tabover(gxlFile);
 	fprintf(gxlFile, "\t<attr name=\"key\">\n");
@@ -545,10 +541,9 @@ static int writeEdgeName(Agedge_t * e, FILE * gxlFile)
 	fprintf(gxlFile, "</string>\n");
 	tabover(gxlFile);
 	fprintf(gxlFile, "\t</attr>\n");
-	rv = TRUE;
-    } else
-	rv = FALSE;
-    return rv;
+	return true;
+    }
+    return false;
 }
 
 
