@@ -438,9 +438,7 @@ static void writeDicts(Agraph_t * g, FILE * gxlFile)
     }
 }
 
-static void
-writeHdr(gxlstate_t * stp, Agraph_t * g, FILE * gxlFile, int top)
-{
+static void writeHdr(gxlstate_t *stp, Agraph_t *g, FILE *gxlFile, bool top) {
     char *name;
     char *kind;
     char *uniqueName;
@@ -527,7 +525,7 @@ static void writeSubgs(gxlstate_t * stp, Agraph_t * g, FILE * gxlFile)
     Agraph_t *subg;
 
     for (subg = agfstsubg(g); subg; subg = agnxtsubg(subg)) {
-	writeHdr(stp, subg, gxlFile, FALSE);
+	writeHdr(stp, subg, gxlFile, false);
 	writeBody(stp, subg, gxlFile);
 	writeTrl(subg, gxlFile, FALSE);
     }
@@ -869,7 +867,7 @@ void gv_to_gxl(Agraph_t * g, FILE * gxlFile)
     fprintf(gxlFile, "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
     fprintf(gxlFile, "<gxl>\n");
 
-    writeHdr(stp, g, gxlFile, TRUE);
+    writeHdr(stp, g, gxlFile, true);
     writeBody(stp, g, gxlFile);
     writeTrl(g, gxlFile, TRUE);
 
