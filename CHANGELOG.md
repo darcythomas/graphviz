@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased (6.0.2)]
 
+### Changed
+
+- Reserved stack size on Windows for the `dot.exe` binary has been increased
+  from the default 1MB to ~3.8MB.
+
 ### Fixed
 
 - Using `aspect` with a custom value in the `packmode` attribute is no longer
