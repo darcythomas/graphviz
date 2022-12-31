@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A buffer overflow in Smyrna when loading GVPR scripts has been corrected.
 - A buffer overflow when loading a plugin with a long type string has been
   corrected.
+- Ensure `HAVE_PANGOCAIRO` is set when using CMake and the library is available.
 
 ### Removed
 
