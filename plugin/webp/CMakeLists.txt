@@ -28,14 +28,14 @@ if(WEBP_FOUND)
     ${WEBP_LINK_LIBRARIES}
   )
 
-  if(CAIRO)
+  if(CAIRO_FOUND)
     target_include_directories(gvplugin_webp SYSTEM PRIVATE
       ${CAIRO_INCLUDE_DIRS}
     )
     target_link_libraries(gvplugin_webp
       ${CAIRO_LINK_LIBRARIES}
     )
-    if(PANGOCAIRO)
+    if(PANGOCAIRO_FOUND)
       target_include_directories(gvplugin_webp SYSTEM PRIVATE
         ${PANGOCAIRO_INCLUDE_DIRS}
       )

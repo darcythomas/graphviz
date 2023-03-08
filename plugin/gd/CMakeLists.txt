@@ -34,14 +34,14 @@ if(GD_FOUND)
     ${GD_LIBRARIES}
   )
 
-  if(CAIRO)
+  if(CAIRO_FOUND)
     target_include_directories(gvplugin_gd SYSTEM PRIVATE
       ${CAIRO_INCLUDE_DIRS}
     )
     target_link_libraries(gvplugin_gd
       ${CAIRO_LINK_LIBRARIES}
     )
-    if(PANGOCAIRO)
+    if(PANGOCAIRO_FOUND)
       target_include_directories(gvplugin_gd SYSTEM PRIVATE
         ${PANGOCAIRO_INCLUDE_DIRS}
       )
