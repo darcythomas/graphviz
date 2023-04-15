@@ -22,8 +22,10 @@ endif
 gvpr_SOURCES = gvprmain.c
 gvpr_CPPFLAGS = $(AM_CPPFLAGS)
 gvpr_LDADD = $(top_builddir)/lib/gvpr/libgvpr.la \
+	$(top_builddir)/lib/common/libcommon_C.la \
 	$(top_builddir)/lib/cgraph/libcgraph.la \
-	$(top_builddir)/lib/cdt/libcdt.la
+	$(top_builddir)/lib/cdt/libcdt.la \
+	$(MATH_LIBS)
 
 .1.1.pdf:
 	rm -f $@; pdffile=$@; psfile=$${pdffile%pdf}ps; \
