@@ -14,10 +14,10 @@
 // produce good enough results. We could also store kerning metrics and line
 // heights for each font if we want to be more thorough.
 struct FontFamilyMetrics {
-  // A pipe-separated, case-insensitive list of font family names which these
+  // A case-insensitive NULL-terminated list of font family names which these
   // metrics correspond to. If multiple font families are listed, they should be
   // metrically equivalent.
-  const char *font_name;
+  const char **font_name;
   // Widths are stored in (units_per_em * 1) pt. (that is how TrueType works
   // internally). A value of -1 indicates that the width for that character is
   // unknown.
@@ -28,11 +28,30 @@ struct FontFamilyMetrics {
   short widths_bold_italic[128];
 };
 
+static const char *times_aliases[] = {
+    "times",           "timesroman",  "timesnewroman", "freeserif",
+    "liberationserif", "nimbusroman", "texgyretermes", "tinos",
+    "thorndale",       NULL};
+static const char *helvetica_aliases[] = {
+    "helvetica", "arial",  "arialmt",    "freesans",    "liberationsans",
+    "arimo",     "albany", "nimbussans", "nimbussansa", "texgyreheros",
+    "albany",    "arimo",  NULL};
+static const char *courier_aliases[] = {
+    "cour",     "courier",        "couriernew", "nimbusmono", "texgyrecursor",
+    "freemono", "liberationmono", "cousine",    "cumberland", NULL};
+static const char *nunito_aliases[] = {"Nunito", NULL};
+static const char *dejavu_aliases[] = {"dejavusans", NULL};
+static const char *consola_aliases[] = {"consola", "consolas", NULL};
+static const char *trebuchet_aliases[] = {"Trebuchet MS", "Trebuchet", NULL};
+static const char *verdana_aliases[] = {"Verdana", NULL};
+static const char *opensans_aliases[] = {"OpenSans", NULL};
+static const char *georgia_aliases[] = {"Georgia", NULL};
+static const char *calibri_aliases[] = {"Calibri", NULL};
+
 static const struct FontFamilyMetrics all_font_metrics[] = {
     // Times_New_Roman.ttf (+ variants) from ttf-mscorefonts-installer.
     {
-        "times|timesroman|timesnewroman|freeserif|liberationserif|nimbusroman|"
-        "texgyretermes|tinos|thorndale",
+        times_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -93,8 +112,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
     },
     // Arial.ttf (+ variants) from ttf-mscorefonts-installer.
     {
-        "helvetica|arial|arialmt|freesans|liberationsans|arimo|albany|"
-        "nimbussans|nimbussansa|texgyreheros|albany|arimo",
+        helvetica_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -155,8 +173,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
     },
     // Courier_New.ttf (+ variants) from ttf-mscorefonts-installer.
     {
-        "cour|courier|couriernew|nimbusmono|texgyrecursor|freemono|"
-        "liberationmono|cousine|cumberland",
+        courier_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -217,7 +234,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
     },
     // https://fonts.google.com/specimen/Nunito
     {
-        "Nunito",
+        nunito_aliases,
         1000,
         {
             0,   -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   -1,  -1,  -1,
@@ -271,7 +288,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
     // Based on DejaVuSans, DejaVuSans-Bold, DejaVuSans-Oblique and
     // DejaVuSans-BoldOblique (as opposed to italic)
     {
-        "dejavusans",
+        dejavu_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -331,7 +348,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
         },
     },
     {
-        "consola|consolas",
+        consola_aliases,
         2048,
         {
             1126, -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -391,7 +408,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
         },
     },
     {
-        "Trebuchet MS|Trebuchet",
+        trebuchet_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -451,7 +468,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
         },
     },
     {
-        "Verdana",
+        verdana_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -511,7 +528,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
         },
     },
     {
-        "OpenSans",
+        opensans_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -571,7 +588,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
         },
     },
     {
-        "Georgia",
+        georgia_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -631,7 +648,7 @@ static const struct FontFamilyMetrics all_font_metrics[] = {
         },
     },
     {
-        "Calibri",
+        calibri_aliases,
         2048,
         {
             -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -700,9 +717,8 @@ static const size_t all_font_metrics_len =
 /// E.g. "timesroman", "Times-Roman", "times ROMAN", "times_roman" and
 /// "tim8esroman" are all considered equal to each other, but not equal to
 /// "Times New Roman".
-static bool font_name_equal_permissive(const char *a, const char *b,
-                                       const size_t b_length) {
-  assert(strlen(b) >= b_length);
+static bool font_name_equal_permissive(const char *a, const char *b) {
+  size_t b_length = strlen(b);
   size_t a_length = strlen(a);
   size_t a_pos = 0;
   size_t b_pos = 0;
@@ -736,24 +752,20 @@ static bool font_name_equal_permissive(const char *a, const char *b,
   return true;
 }
 
-/// Checks whether a font name is in a pipe-separated list of font names,
-/// ignoring case and special characters.
+/// Checks whether a font name is in a list of font names, ignoring case and
+/// special characters.
 ///
 /// E.g. "Times-Roman" and "TimesNewRoman" are both in
-/// "times|timesroman|timesnewroman", but "Arial" is not.
-static bool font_in_list_permissive(const char *value, const char *list) {
+/// {"times", "timesroman", "timesnewroman", NULL}, but "Arial" is not.
+static bool font_in_list_permissive(const char *value, const char **list) {
   assert(value && strlen(value));
-  assert(list && strlen(list));
+  assert(list && list[0] != NULL);
 
-  do {
-    const char *next_pipe = strchr(list, '|');
-    size_t next_pipe_or_end_pos =
-        next_pipe ? (size_t)(next_pipe - list) : strlen(list);
-    if (font_name_equal_permissive(value, list, next_pipe_or_end_pos)) {
+  for (size_t i = 0; list[i] != NULL; ++i) {
+    if (font_name_equal_permissive(value, list[i])) {
       return true;
     }
-    list = next_pipe ? next_pipe + 1 : NULL;
-  } while (list);
+  }
 
   return false;
 }
