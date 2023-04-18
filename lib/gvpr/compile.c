@@ -665,7 +665,6 @@ getval(Expr_t * pgm, Exnode_t * node, Exid_t * sym, Exref_t * ref,
     Agnode_t *np;
     Agnode_t *hp;
     Agedge_t *ep;
-    char* name;
     gvprbinding* bp;
 
     assert(sym->lex != CONSTANT);
@@ -1314,9 +1313,9 @@ getval(Expr_t * pgm, Exnode_t * node, Exid_t * sym, Exref_t * ref,
 	    v.integer = system(args[0].string);
 	    break;
 	case F_hasattr:
-	case F_get:
+	case F_get: {
 	    objp = int2ptr(args[0].integer);
-	    name = args[1].string;
+	    char *name = args[1].string;
 	    if (!objp) {
 		exerror("NULL object passed to aget()/hasAttr()");
 		v.integer = 0;
@@ -1341,6 +1340,7 @@ getval(Expr_t * pgm, Exnode_t * node, Exid_t * sym, Exref_t * ref,
         	}
             }
 	    break;
+	}
 	case F_set:
 	    objp = int2ptr(args[0].integer);
 	    if (!objp) {
