@@ -148,7 +148,7 @@ static void gvplugin_activate(GVC_t * gvc, api_t api, const char *typestr,
     }
 }
 
-gvplugin_library_t *gvplugin_library_load(GVC_t *gvc, char *pathname) {
+gvplugin_library_t *gvplugin_library_load(GVC_t *gvc, const char *pathname) {
 #ifdef ENABLE_LTDL
     lt_dlhandle hndl;
     lt_ptr ptr;
