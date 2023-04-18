@@ -3308,8 +3308,7 @@ static void free_field(field_t * f)
 static field_t *parse_error(field_t * rv, char *port)
 {
     free_field(rv);
-    if (port)
-	free(port);
+    free(port);
     return NULL;
 }
 
