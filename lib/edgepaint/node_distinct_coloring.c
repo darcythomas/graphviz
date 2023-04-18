@@ -223,9 +223,8 @@ int node_distinct_coloring(char *color_scheme, char *lightness, bool weightedQ,
     scheme = COLOR_GRAY;
     cdim = *cdim0 = 1;
   } else if (sscanf(color_scheme,"#%02X%02X%02X", &r, &g, &b) == 3 ){
-    double *color_points = NULL;
     scheme = COLOR_LAB;
-    color_blend_rgb2lab(color_scheme, maxcolors, &color_points);
+    double *color_points = color_blend_rgb2lab(color_scheme, maxcolors);
     assert(color_points);
     qt = QuadTree_new_from_point_list(cdim, maxcolors, max_qtree_level,
                                       color_points);

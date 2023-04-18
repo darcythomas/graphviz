@@ -35,6 +35,11 @@ color_xyz color_xyz_init(double x, double y, double z);
 color_lab color_lab_init(double l, double a, double b);
 QuadTree lab_gamut_quadtree(const char *lightness, int max_qtree_level); /* construct a quadtree of the LAB gamut points */
 double *lab_gamut(const char *lightness, int *n);  /* give a list of n points  in the file defining the LAB color gamut */
-void color_blend_rgb2lab(char *color_list, const int maxpoints, double **colors); /* give a color list of the form "#ff0000,#00ff00,...", get a list of around maxpoints
-										     colors in an array colors0 of size [maxpoints*3] of the form {{l,a,b},...}.
-										     If *colors0 is NULL, it will be allocated. */
+
+/** derive around maxpoints from a color list
+ *
+ * \param color_list List of the form "#ff0000,#00ff00,..."
+ * \param maxpoints Maximum number of points to return
+ * \return An array of size [maxpoints*3] of the form {{l,a,b},...}
+ */
+double *color_blend_rgb2lab(char *color_list, const int maxpoints);
