@@ -394,9 +394,9 @@ extern "C" {
 #define CLOSE(f)	{ while(close(f) < 0 && errno == EINTR) errno = 0; }
 
 /* string stream extent */
-#define SFSTRSIZE(f)	{ Sfoff_t s = (f)->next - (f)->data; \
-			  if(s > (f)->here) \
-			    { (f)->here = s; if(s > (f)->extent) (f)->extent = s; } \
+#define SFSTRSIZE(f)	{ Sfoff_t s_ = (f)->next - (f)->data; \
+			  if(s_ > (f)->here) \
+			    { (f)->here = s_; if(s_ > (f)->extent) (f)->extent = s_; } \
 			}
 
 /* control flags for open() */
