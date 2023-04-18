@@ -430,9 +430,8 @@ static int inPoly(Point vertex[], int n, Point q)
 }
 
 static int inBox(Point p, Point origin_point, Point corner) {
-    return ((p.x <= corner.x) &&
-	    (p.x >= origin_point.x) && (p.y <= corner.y) && (p.y >= origin_point.y));
-
+    return p.x <= corner.x && p.x >= origin_point.x && p.y <= corner.y &&
+           p.y >= origin_point.y;
 }
 
 static void transCopy(Point * inp, int cnt, Point off, Point * outp)
