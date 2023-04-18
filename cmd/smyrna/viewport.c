@@ -216,26 +216,25 @@ static void get_data_dir(void)
     view->template_file = gv_strdup(smyrnaPath("template.dot"));
 }
 
-void init_viewport(ViewInfo * view)
-{
+void init_viewport(ViewInfo *vi) {
     FILE *input_file = NULL;
     FILE *input_file2 = NULL;
     static char* path;
     get_data_dir();
-    input_file = fopen(view->template_file, "rb");
+    input_file = fopen(vi->template_file, "rb");
     if (!input_file) {
 	fprintf(stderr,
 		"default attributes template graph file \"%s\" not found\n",
-		view->template_file);
+		vi->template_file);
 	graphviz_exit(-1);
     } 
-    view->systemGraphs.def_attrs = agread(input_file, NULL);
+    vi->systemGraphs.def_attrs = agread(input_file, NULL);
     fclose (input_file);
 
-    if (!view->systemGraphs.def_attrs) {
+    if (!vi->systemGraphs.def_attrs) {
 	fprintf(stderr,
 		"could not load default attributes template graph file \"%s\"\n",
-		view->template_file);
+		vi->template_file);
 	graphviz_exit(-1);
     }
     if (!path)
@@ -246,115 +245,111 @@ void init_viewport(ViewInfo * view)
 	graphviz_exit(-1);
 
     }
-    view->systemGraphs.attrs_widgets = agread(input_file2, NULL);
+    vi->systemGraphs.attrs_widgets = agread(input_file2, NULL);
     fclose (input_file2);
-    if (!view->systemGraphs.attrs_widgets) {
+    if (!vi->systemGraphs.attrs_widgets) {
 	fprintf(stderr,"could not load default attribute widgets graph file \"%s\"\n",smyrnaPath("attr_widgets.dot"));
 	graphviz_exit(-1);
     }
     //init graphs
-    view->g = NULL;		//no graph, gl screen should check it
-    view->graphCount = 0;	//and disable interactivity if count is zero
+    vi->g = NULL;		//no graph, gl screen should check it
+    vi->graphCount = 0;	//and disable interactivity if count is zero
 
-    view->bdxLeft = 0;
-    view->bdxRight = 500;
-    view->bdyBottom = 0;
-    view->bdyTop = 500;
+    vi->bdxLeft = 0;
+    vi->bdxRight = 500;
+    vi->bdyBottom = 0;
+    vi->bdyTop = 500;
 
-    view->borderColor.R = 1;
-    view->borderColor.G = 0;
-    view->borderColor.B = 0;
-    view->borderColor.A = 1;
+    vi->borderColor.R = 1;
+    vi->borderColor.G = 0;
+    vi->borderColor.B = 0;
+    vi->borderColor.A = 1;
 
-    view->bdVisible = 1;	//show borders red
+    vi->bdVisible = 1;	//show borders red
 
-    view->gridSize = 10;
-    view->gridColor.R = 0.5;
-    view->gridColor.G = 0.5;
-    view->gridColor.B = 0.5;
-    view->gridColor.A = 1;
-    view->gridVisible = 0;	//show grids in light gray
+    vi->gridSize = 10;
+    vi->gridColor.R = 0.5;
+    vi->gridColor.G = 0.5;
+    vi->gridColor.B = 0.5;
+    vi->gridColor.A = 1;
+    vi->gridVisible = 0;	//show grids in light gray
 
     //mouse mode=pan
     //pen color
-    view->penColor.R = 0;
-    view->penColor.G = 0;
-    view->penColor.B = 0;
-    view->penColor.A = 1;
+    vi->penColor.R = 0;
+    vi->penColor.G = 0;
+    vi->penColor.B = 0;
+    vi->penColor.A = 1;
 
-    view->fillColor.R = 1;
-    view->fillColor.G = 0;
-    view->fillColor.B = 0;
-    view->fillColor.A = 1;
+    vi->fillColor.R = 1;
+    vi->fillColor.G = 0;
+    vi->fillColor.B = 0;
+    vi->fillColor.A = 1;
     //background color , default white
-    view->bgColor.R = 1;
-    view->bgColor.G = 1;
-    view->bgColor.B = 1;
-    view->bgColor.A = 1;
+    vi->bgColor.R = 1;
+    vi->bgColor.G = 1;
+    vi->bgColor.B = 1;
+    vi->bgColor.A = 1;
 
     //selected objets are drawn with this color
-    view->selectedNodeColor.R = 1;
-    view->selectedNodeColor.G = 0;
-    view->selectedNodeColor.B = 0;
-    view->selectedNodeColor.A = 1;
+    vi->selectedNodeColor.R = 1;
+    vi->selectedNodeColor.G = 0;
+    vi->selectedNodeColor.B = 0;
+    vi->selectedNodeColor.A = 1;
 
     //default line width;
-    view->LineWidth = 1;
+    vi->LineWidth = 1;
 
-    //default view settings , camera is not active
-    view->panx = 0;
-    view->pany = 0;
-    view->panz = 0;
+    //default view settings, camera is not active
+    vi->panx = 0;
+    vi->pany = 0;
+    vi->panz = 0;
 
+    vi->zoom = -20;
 
-    view->zoom = -20;
-
-    view->mouse.down = 0;
-    view->activeGraph = -1;
-    view->Topview = gv_alloc(sizeof(topview));
-    view->Topview->fisheyeParams.fs = 0;
-    view->Topview->xDot=NULL;
+    vi->mouse.down = 0;
+    vi->activeGraph = -1;
+    vi->Topview = gv_alloc(sizeof(topview));
+    vi->Topview->fisheyeParams.fs = 0;
+    vi->Topview->xDot=NULL;
 
     /* init topfish parameters */
-    view->Topview->fisheyeParams.level.num_fine_nodes = 10;
-    view->Topview->fisheyeParams.level.coarsening_rate = 2.5;
-    view->Topview->fisheyeParams.hier.dist2_limit = 1;
-    view->Topview->fisheyeParams.repos.rescale = Polar;
-    view->Topview->fisheyeParams.repos.width =
-	(int) (view->bdxRight - view->bdxLeft);
-    view->Topview->fisheyeParams.repos.height =
-	(int) (view->bdyTop - view->bdyBottom);
-    view->Topview->fisheyeParams.repos.margin = 0;
-    view->Topview->fisheyeParams.repos.graphSize = 100;
-    view->Topview->fisheyeParams.repos.distortion = 1.0;
+    vi->Topview->fisheyeParams.level.num_fine_nodes = 10;
+    vi->Topview->fisheyeParams.level.coarsening_rate = 2.5;
+    vi->Topview->fisheyeParams.hier.dist2_limit = 1;
+    vi->Topview->fisheyeParams.repos.rescale = Polar;
+    vi->Topview->fisheyeParams.repos.width = (int)(vi->bdxRight - vi->bdxLeft);
+    vi->Topview->fisheyeParams.repos.height = (int)(vi->bdyTop - vi->bdyBottom);
+    vi->Topview->fisheyeParams.repos.margin = 0;
+    vi->Topview->fisheyeParams.repos.graphSize = 100;
+    vi->Topview->fisheyeParams.repos.distortion = 1.0;
     /*create timer */
-    view->timer = g_timer_new();
-    view->timer2 = g_timer_new();
-    view->timer3 = g_timer_new();
+    vi->timer = g_timer_new();
+    vi->timer2 = g_timer_new();
+    vi->timer3 = g_timer_new();
 
-    g_timer_stop(view->timer);
-    view->active_frame = 0;
-    view->total_frames = 1500;
+    g_timer_stop(vi->timer);
+    vi->active_frame = 0;
+    vi->total_frames = 1500;
     /*add a call back to the main() */
     g_timeout_add_full(G_PRIORITY_DEFAULT, 100u, gl_main_expose, NULL, NULL);
-    view->cameras = NULL;
-    view->camera_count = 0;
-    view->active_camera = -1;
-    set_viewport_settings_from_template(view, view->systemGraphs.def_attrs);
-    view->Topview->Graphdata.GraphFileName = NULL;
-    view->colschms = NULL;
-    view->arcball = gv_alloc(sizeof(ArcBall_t));
-    view->keymap.down=0;
-    load_mouse_actions (view);
-    view->refresh.color=1;
-    view->refresh.pos=1;
-    view->refresh.selection=1;
-    if(view->guiMode!=GUI_FULLSCREEN)
-	view->guiMode=GUI_WINDOWED;
+    vi->cameras = NULL;
+    vi->camera_count = 0;
+    vi->active_camera = -1;
+    set_viewport_settings_from_template(vi, vi->systemGraphs.def_attrs);
+    vi->Topview->Graphdata.GraphFileName = NULL;
+    vi->colschms = NULL;
+    vi->arcball = gv_alloc(sizeof(ArcBall_t));
+    vi->keymap.down=0;
+    load_mouse_actions(vi);
+    vi->refresh.color=1;
+    vi->refresh.pos=1;
+    vi->refresh.selection=1;
+    if(vi->guiMode!=GUI_FULLSCREEN)
+	vi->guiMode=GUI_WINDOWED;
 
     /*create glcomp menu system */
-    view->widgets = glcreate_gl_topview_menu();
-
+    vi->widgets = glcreate_gl_topview_menu();
 }
 
 
