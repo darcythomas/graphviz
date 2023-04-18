@@ -48,10 +48,10 @@ typedef struct {
 
 #if !defined(__APPLE__) && !defined(_WIN32)
 /// read the given symlink in the /proc file system
-static std::string read_proc(const std::string &path) {
+static std::string read_proc(const std::string &pathname) {
 
   std::vector<char> buf(PATH_MAX + 1, '\0');
-  if (readlink(path.c_str(), buf.data(), buf.size()) < 0)
+  if (readlink(pathname.c_str(), buf.data(), buf.size()) < 0)
     return "";
 
   // was the path too long?
