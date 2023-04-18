@@ -429,10 +429,9 @@ static int inPoly(Point vertex[], int n, Point q)
 	return 0;
 }
 
-static int inBox(Point p, Point origin, Point corner)
-{
+static int inBox(Point p, Point origin_point, Point corner) {
     return ((p.x <= corner.x) &&
-	    (p.x >= origin.x) && (p.y <= corner.y) && (p.y >= origin.y));
+	    (p.x >= origin_point.x) && (p.y <= corner.y) && (p.y >= origin_point.y));
 
 }
 
