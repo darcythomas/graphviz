@@ -44,13 +44,13 @@ ssize_t sfwrite(Sfio_t * f, const void * buf, size_t n)
 	f->mode &= ~SF_PEEK;
 
 	if (f->mode & SF_PKRD) {	/* read past peeked data */
-	    char buf[16];
+	    char buffer[16];
 	    ssize_t r;
 
 	    for (w = n; w > 0;) {
-		if ((r = w) > sizeof(buf))
-		    r = sizeof(buf);
-		if ((r = read(f->file, buf, (size_t)r)) <= 0) {
+		if ((r = w) > sizeof(buffer))
+		    r = sizeof(buffer);
+		if ((r = read(f->file, buffer, (size_t)r)) <= 0) {
 		    n -= w;
 		    break;
 		} else
