@@ -203,8 +203,7 @@ concat (char* pfx, char* sfx)
  * 
  * FIX - use pathinclude/pathfind
  */
-static char *resolve(char *arg, int Verbose)
-{
+static char *resolve(char *arg, int verbose) {
     char *path;
     char *s;
     char *cp;
@@ -229,7 +228,7 @@ static char *resolve(char *arg, int Verbose)
     }
     else
 	path = DFLT_GVPRPATH;
-    if (Verbose)
+    if (verbose)
 	fprintf (stderr, "PATH: %s\n", path);
     agxbuf fp = {0};
 
@@ -260,7 +259,7 @@ static char *resolve(char *arg, int Verbose)
 
     agxbfree(&fp);
     free(pathp);
-    if (Verbose)
+    if (verbose)
 	fprintf (stderr, "file %s resolved to %s\n", arg, fname);
     return fname;
 }
