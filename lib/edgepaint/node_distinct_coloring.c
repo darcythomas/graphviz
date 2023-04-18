@@ -229,6 +229,7 @@ int node_distinct_coloring(char *color_scheme, char *lightness, bool weightedQ,
     assert(color_points);
     qt = QuadTree_new_from_point_list(cdim, maxcolors, max_qtree_level,
                                       color_points);
+    free(color_points);
     assert(qt);
   } else {
     return ERROR_BAD_COLOR_SCHEME;
