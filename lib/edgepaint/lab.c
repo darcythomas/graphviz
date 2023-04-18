@@ -7,6 +7,8 @@
  *
  * Contributors: Details at https://graphviz.org
  *************************************************************************/
+
+#include <cgraph/alloc.h>
 #include <sparse/general.h>
 #include <sparse/QuadTree.h>
 #include <edgepaint/lab.h>
@@ -220,9 +222,8 @@ void color_blend_rgb2lab(char *color_list, const int maxpoints, double **colors0
 
   int nc = 1, r, g, b, i, ii, jj, cdim = 3;
   char *cl;
-  color_lab *lab;
   color_rgb rgb;
-  double *dists, step, dist_current;
+  double step, dist_current;
   double *colors = NULL;
   char *cp;
 
@@ -237,7 +238,7 @@ void color_blend_rgb2lab(char *color_list, const int maxpoints, double **colors0
   while ((cl=strchr(cl, ',')) != NULL){
     cl++; nc++;
   }
-  lab = malloc(sizeof(color_lab)*MAX(nc,1));
+  color_lab *lab = gv_calloc(MAX(nc, 1), sizeof(color_lab));
 
   cl = color_list - 1;
   nc = 0;
@@ -248,7 +249,7 @@ void color_blend_rgb2lab(char *color_list, const int maxpoints, double **colors0
     lab[nc++] = RGB2LAB(rgb);
   } while ((cl=strchr(cl, ',')) != NULL);
 
-  dists = malloc(sizeof(double)*MAX(1, nc));
+  double *dists = gv_calloc(MAX(1, nc), sizeof(double));
   dists[0] = 0;
   for (i = 0; i < nc - 1; i++){
     dists[i+1] = lab_dist(lab[i], lab[i+1]);
@@ -261,7 +262,7 @@ void color_blend_rgb2lab(char *color_list, const int maxpoints, double **colors0
     fprintf(stderr,"sum = %f\n", dists[nc-1]);
 
   if (!(*colors0)){
-    *colors0 = malloc(sizeof(double)*maxpoints*cdim);
+    *colors0 = gv_calloc(maxpoints * cdim, sizeof(double));
   }
   colors = *colors0; 
   if (maxpoints == 1){
