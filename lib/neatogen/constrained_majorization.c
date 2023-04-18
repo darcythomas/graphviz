@@ -231,7 +231,6 @@ int stress_majorization_with_hierarchy(vtx_data * graph,	/* Input graph in spars
     }
 
     if (levels_gap > 0) {
-	int length = n + n * (n - 1) / 2;
 	double sum1, sum2, scale_ratio;
 	int count;
 	sum1 = (float) (n * (n - 1) / 2);
