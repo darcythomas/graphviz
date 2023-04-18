@@ -113,7 +113,7 @@ void addVertex(Site * s, double x, double y)
     PtItem *p;
     PtItem *curr;
     PtItem *prev;
-    Point *origin = &s->coord;
+    Point *origin_point = &s->coord;
     PtItem tmp;
     int cmp;
 
@@ -123,7 +123,7 @@ void addVertex(Site * s, double x, double y)
     tmp.p.x = x;
     tmp.p.y = y;
 
-    cmp = compare(origin, &tmp, curr);
+    cmp = compare(origin_point, &tmp, curr);
     if (cmp == 0)
 	return;
     else if (cmp < 0) {
@@ -137,7 +137,7 @@ void addVertex(Site * s, double x, double y)
 
     prev = curr;
     curr = curr->next;
-    while ((cmp = compare(origin, &tmp, curr)) > 0) {
+    while ((cmp = compare(origin_point, &tmp, curr)) > 0) {
 	prev = curr;
 	curr = curr->next;
     }
