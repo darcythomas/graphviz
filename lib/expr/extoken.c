@@ -324,7 +324,6 @@ extoken_fn(Expr_t* ex)
 	int	c;
 	char*	s;
 	int	q;
-	int		b;
 	char*		e;
 	Dt_t*		v;
 
@@ -539,11 +538,11 @@ extoken_fn(Expr_t* ex)
 			exunlex(ex, c);
 			return ex_lval.op = '.';
 		case '0': case '1': case '2': case '3': case '4':
-		case '5': case '6': case '7': case '8': case '9':
+		case '5': case '6': case '7': case '8': case '9': {
 			sfstrseek(ex->tmp, 0, SEEK_SET);
 			sfputc(ex->tmp, c);
 			q = INTEGER;
-			b = 0;
+			int b = 0;
 			if ((c = lex(ex)) == 'x' || c == 'X')
 			{
 				b = 16;
@@ -618,6 +617,7 @@ extoken_fn(Expr_t* ex)
 				goto eof;
 			}
 			return q;
+		}
 		default:
 			if (isalpha(c) || c == '_' || c == '$')
 			{
