@@ -223,11 +223,12 @@ int node_distinct_coloring(char *color_scheme, char *lightness, bool weightedQ,
     scheme = COLOR_GRAY;
     cdim = *cdim0 = 1;
   } else if (sscanf(color_scheme,"#%02X%02X%02X", &r, &g, &b) == 3 ){
-    double *colors = NULL;
+    double *color_points = NULL;
     scheme = COLOR_LAB;
-    color_blend_rgb2lab(color_scheme, maxcolors, &colors);
-    assert(colors);
-    qt = QuadTree_new_from_point_list(cdim, maxcolors, max_qtree_level, colors);
+    color_blend_rgb2lab(color_scheme, maxcolors, &color_points);
+    assert(color_points);
+    qt = QuadTree_new_from_point_list(cdim, maxcolors, max_qtree_level,
+                                      color_points);
     assert(qt);
   } else {
     return ERROR_BAD_COLOR_SCHEME;
