@@ -11,6 +11,7 @@
 #include <inttypes.h>
 #include	<limits.h>
 #include	<sfio/sfhdr.h>
+#include	<stdbool.h>
 #include	<stddef.h>
 
 /*	The main engine for reading formatted data
@@ -499,18 +500,19 @@ int sfvscanf(Sfio_t * f, const char *form, va_list args)
 
 	if (_Sftype[fmt] == SFFMT_FLOAT) {
 	    char *val;
-	    int dot, exponent;
 
 	    val = accept;
 	    if (width >= SF_MAXDIGITS)
 		width = SF_MAXDIGITS - 1;
-	    dot = exponent = 0;
+	    int exponent = 0;
+	    bool seen_dot = false;
 	    do {
 		if (isdigit(inp))
 		    *val++ = inp;
 		else if (inp == '.') {	/* too many dots */
-		    if (dot++ > 0)
+		    if (seen_dot)
 			break;
+		    seen_dot = true;
 		    *val++ = '.';
 		} else if (inp == 'e' || inp == 'E') {	/* too many e,E */
 		    if (exponent++ > 0)
