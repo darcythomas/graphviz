@@ -230,7 +230,6 @@ int makePoly(Poly * pp, Agnode_t * n, float xmargin, float ymargin)
     int sides;
     Point *verts;
     polygon_t *poly;
-    boxf b;
 
     if (ND_clust(n)) {
 	Point b;
@@ -268,16 +267,17 @@ int makePoly(Poly * pp, Agnode_t * n, float xmargin, float ymargin)
 		pp->kind = 0;
 
 	    break;
-	case SH_RECORD:
+	case SH_RECORD: {
 	    sides = 4;
 	    verts = N_GNEW(sides, Point);
-	    b = ((field_t *) ND_shape_info(n))->b;
+	    boxf b = ((field_t *) ND_shape_info(n))->b;
 	    verts[0] = makeScaledPoint(b.LL.x, b.LL.y);
 	    verts[1] = makeScaledPoint(b.UR.x, b.LL.y);
 	    verts[2] = makeScaledPoint(b.UR.x, b.UR.y);
 	    verts[3] = makeScaledPoint(b.LL.x, b.UR.y);
 	    pp->kind = BOX;
 	    break;
+	}
 	case SH_POINT:
 	    pp->kind = CIRCLE;
 	    verts = genRound(n, &sides, 0, 0);
