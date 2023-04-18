@@ -148,8 +148,7 @@ static void gvplugin_activate(GVC_t * gvc, api_t api, const char *typestr,
     }
 }
 
-gvplugin_library_t *gvplugin_library_load(GVC_t * gvc, char *path)
-{
+gvplugin_library_t *gvplugin_library_load(GVC_t *gvc, char *pathname) {
 #ifdef ENABLE_LTDL
     lt_dlhandle hndl;
     lt_ptr ptr;
@@ -164,13 +163,13 @@ gvplugin_library_t *gvplugin_library_load(GVC_t * gvc, char *path)
     libdir = gvconfig_libdir(gvc);
     agxbuf fullpath = {0};
 #ifdef _WIN32
-    if (path[1] == ':') {
+    if (pathname[1] == ':') {
 #else
-    if (path[0] == '/') {
+    if (pathname[0] == '/') {
 #endif
-        agxbput(&fullpath, path);
+        agxbput(&fullpath, pathname);
     } else {
-        agxbprint(&fullpath, "%s%s%s", libdir, DIRSEP, path);
+        agxbprint(&fullpath, "%s%s%s", libdir, DIRSEP, pathname);
     }
 
     if (lt_dlinit()) {

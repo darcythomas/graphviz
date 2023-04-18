@@ -29,7 +29,7 @@
 		    const char *typestr, int quality, gvplugin_package_t *package,
 		    gvplugin_installed_t * typeptr);
     gvplugin_available_t *gvplugin_load(GVC_t * gvc, api_t api, const char *type);
-    gvplugin_library_t *gvplugin_library_load(GVC_t *gvc, char *path);
+    gvplugin_library_t *gvplugin_library_load(GVC_t *gvc, char *pathname);
     api_t gvplugin_api(const char *str);
     char * gvplugin_api_name(api_t api);
     void gvplugin_write_status(GVC_t * gvc);
