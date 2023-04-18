@@ -698,8 +698,8 @@ static const size_t all_font_metrics_len =
 /// Compares two font names for equality, ignoring case and special characters.
 ///
 /// E.g. "timesroman", "Times-Roman", "times ROMAN", "times_roman" and
-/// "tim8esroman" are all considered equal to eachother, but not equal to "Times
-/// New Roman".
+/// "tim8esroman" are all considered equal to each other, but not equal to
+/// "Times New Roman".
 static bool font_name_equal_permissive(const char *a, const char *b,
                                        const size_t b_length) {
   assert(strlen(b) >= b_length);
