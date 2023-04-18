@@ -188,10 +188,8 @@ static bool pango_textlayout(textspan_t * span, char **fontpath)
 
 #ifdef ENABLE_PANGO_MARKUP
     if ((span->font) && (flags = span->font->flags)) {
-	char buf[BUFSIZ];
-	agxbuf xb;
+	agxbuf xb = {0};
 
-	agxbinit(&xb, BUFSIZ, buf);
 	agxbput(&xb,"<span");
 
 	if (flags & HTML_BF)
