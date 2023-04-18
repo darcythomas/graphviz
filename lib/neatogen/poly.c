@@ -138,7 +138,6 @@ int makeAddPoly(Poly * pp, Agnode_t * n, float xmargin, float ymargin)
     int sides;
     Point *verts;
     polygon_t *poly;
-    boxf b;
 
     if (ND_clust(n)) {
 	Point b;
@@ -195,16 +194,17 @@ int makeAddPoly(Poly * pp, Agnode_t * n, float xmargin, float ymargin)
 	    } else
 		verts = genRound(n, &sides, xmargin, ymargin);
 	    break;
-	case SH_RECORD:
+	case SH_RECORD: {
 	    sides = 4;
 	    verts = N_GNEW(sides, Point);
-	    b = ((field_t *) ND_shape_info(n))->b;
+	    boxf b = ((field_t*)ND_shape_info(n))->b;
 	    verts[0] = makeScaledTransPoint(b.LL.x, b.LL.y, -xmargin, -ymargin);
 	    verts[1] = makeScaledTransPoint(b.UR.x, b.LL.y, xmargin, -ymargin);
 	    verts[2] = makeScaledTransPoint(b.UR.x, b.UR.y, xmargin, ymargin);
 	    verts[3] = makeScaledTransPoint(b.LL.x, b.UR.y, -xmargin, ymargin);
 	    pp->kind = BOX;
 	    break;
+	}
 	case SH_POINT:
 	    pp->kind = CIRCLE;
 	    verts = genRound(n, &sides, xmargin, ymargin);
