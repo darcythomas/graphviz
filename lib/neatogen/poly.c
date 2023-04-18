@@ -18,6 +18,7 @@
 #include <neatogen/poly.h>
 #include <common/geom.h>
 #include <neatogen/mem.h>
+#include <stdbool.h>
 
 #define BOX 1
 #define ISBOX(p) ((p)->kind & BOX)
@@ -429,7 +430,7 @@ static int inPoly(Point vertex[], int n, Point q)
 	return 0;
 }
 
-static int inBox(Point p, Point origin_point, Point corner) {
+static bool inBox(Point p, Point origin_point, Point corner) {
     return p.x <= corner.x && p.x >= origin_point.x && p.y <= corner.y &&
            p.y >= origin_point.y;
 }
