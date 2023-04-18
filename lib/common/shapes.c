@@ -3305,10 +3305,9 @@ static void free_field(field_t * f)
 /* parse_error:
  * Clean up memory allocated in parse_reclbl, then return NULL
  */
-static field_t *parse_error(field_t * rv, char *port)
-{
+static field_t *parse_error(field_t *rv, char *portname) {
     free_field(rv);
-    free(port);
+    free(portname);
     return NULL;
 }
 
