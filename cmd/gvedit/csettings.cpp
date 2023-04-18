@@ -74,10 +74,10 @@ static std::string find_me(void) {
     assert(rc != 0);
     assert(buf_size > 0);
 
-    std::vector<char> path(buf_size);
+    std::vector<char> pathname(buf_size);
 
     // retrieve the actual path
-    if (_NSGetExecutablePath(path.data(), &buf_size) < 0) {
+    if (_NSGetExecutablePath(pathname.data(), &buf_size) < 0) {
       errout << "failed to get path for executable.\n";
       return "";
     }
@@ -85,49 +85,49 @@ static std::string find_me(void) {
     // try to resolve any levels of symlinks if possible
     while (true) {
       std::vector<char> buf(PATH_MAX + 1, '\0');
-      if (readlink(path.data(), buf.data(), buf.size()) < 0)
-        return path.data();
+      if (readlink(pathname.data(), buf.data(), buf.size()) < 0)
+        return pathname.data();
 
-      path = buf;
+      pathname = buf;
     }
   }
 #elif defined(_WIN32)
   {
-    std::vector<char> path;
+    std::vector<char> pathname;
     int rc = 0;
 
     do {
       {
-        size_t size = path.empty() ? 1024 : (path.size() * 2);
-        path.resize(size);
+        size_t size = pathname.empty() ? 1024 : (pathname.size() * 2);
+        pathname.resize(size);
       }
 
-      rc = GetModuleFileName(NULL, path.data(), path.size());
+      rc = GetModuleFileName(NULL, pathname.data(), pathname.size());
       if (rc == 0) {
         errout << "failed to get path for executable.\n";
         return "";
       }
 
-    } while (rc == path.size());
+    } while (rc == pathname.size());
 
-    return path.data();
+    return pathname.data();
   }
 #else
 
   // Linux
-  std::string path = read_proc("/proc/self/exe");
-  if (path != "")
-    return path;
+  std::string pathname = read_proc("/proc/self/exe");
+  if (pathname != "")
+    return pathname;
 
   // DragonFly BSD, FreeBSD
-  path = read_proc("/proc/curproc/file");
-  if (path != "")
-    return path;
+  pathname = read_proc("/proc/curproc/file");
+  if (pathname != "")
+    return pathname;
 
   // NetBSD
-  path = read_proc("/proc/curproc/exe");
-  if (path != "")
-    return path;
+  pathname = read_proc("/proc/curproc/exe");
+  if (pathname != "")
+    return pathname;
 
 // /proc-less FreeBSD
 #ifdef __FreeBSD__
