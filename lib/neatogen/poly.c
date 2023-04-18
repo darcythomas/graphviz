@@ -47,22 +47,22 @@ void breakPoly(Poly * pp)
 
 static void bbox(Point * verts, int cnt, Point * o, Point * c)
 {
-    double xmin, ymin, xmax, ymax;
+    double x_min, y_min, x_max, y_max;
     int i;
 
-    xmin = xmax = verts->x;
-    ymin = ymax = verts->y;
+    x_min = x_max = verts->x;
+    y_min = y_max = verts->y;
     for (i = 1; i < cnt; i++) {
 	verts++;
-	xmin = fmin(xmin, verts->x);
-	ymin = fmin(ymin, verts->y);
-	xmax = fmax(xmax, verts->x);
-	ymax = fmax(ymax, verts->y);
+	x_min = fmin(x_min, verts->x);
+	y_min = fmin(y_min, verts->y);
+	x_max = fmax(x_max, verts->x);
+	y_max = fmax(y_max, verts->y);
     }
-    o->x = xmin;
-    o->y = ymin;
-    c->x = xmax;
-    c->y = ymax;
+    o->x = x_min;
+    o->y = y_min;
+    c->x = x_max;
+    c->y = y_max;
 }
 
 static void inflatePts(Point * verts, int cnt, float xmargin, float ymargin)
