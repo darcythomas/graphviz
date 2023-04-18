@@ -54,14 +54,10 @@ static void bbox(Point * verts, int cnt, Point * o, Point * c)
     ymin = ymax = verts->y;
     for (i = 1; i < cnt; i++) {
 	verts++;
-	if (verts->x < xmin)
-	    xmin = verts->x;
-	if (verts->y < ymin)
-	    ymin = verts->y;
-	if (verts->x > xmax)
-	    xmax = verts->x;
-	if (verts->y > ymax)
-	    ymax = verts->y;
+	xmin = fmin(xmin, verts->x);
+	ymin = fmin(ymin, verts->y);
+	xmax = fmax(xmax, verts->x);
+	ymax = fmax(ymax, verts->y);
     }
     o->x = xmin;
     o->y = ymin;
