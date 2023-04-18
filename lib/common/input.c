@@ -130,11 +130,10 @@ static char *getFlagOpt(int argc, char **argv, int *idx)
  * find next (back)slash moving left; return string to the right.
  * If no next slash is found, return the whole string.
  */
-static char* dotneato_basename (char* path)
-{
+static char *dotneato_basename(char *pathname) {
     char* ret;
-    char* s = path;
-    if (*s == '\0') return path; /* empty string */
+    char* s = pathname;
+    if (*s == '\0') return pathname; /* empty string */
 #ifdef _WIN32
     /* On Windows, executables, by convention, end in ".exe". Thus,
      * this may be part of the path name and must be removed for
@@ -148,13 +147,13 @@ static char* dotneato_basename (char* path)
     while (*s) s++;
     s--;
     /* skip over trailing slashes, nulling out as we go */
-    while (s > path && (*s == '/' || *s == '\\'))
+    while (s > pathname && (*s == '/' || *s == '\\'))
 	*s-- = '\0';
-    if (s == path) ret = path;
+    if (s == pathname) ret = pathname;
     else {
-	while (s > path && (*s != '/' && *s != '\\')) s--;
+	while (s > pathname && (*s != '/' && *s != '\\')) s--;
 	if (*s == '/' || *s == '\\') ret = s+1;
-	else ret = path;
+	else ret = pathname;
     }
 #ifdef _WIN32
     /* On Windows, names are case-insensitive, so make name lower-case
