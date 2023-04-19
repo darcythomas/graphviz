@@ -161,7 +161,7 @@ public:
   /// Return the element of the given type with the specified index found among
   /// the element's children. Throwns an exception if there's no such element
   /// with the specified index.
-  SVG::SVGElement &find_child(SVG::SVGElementType type, std::size_t index = 0);
+  SVG::SVGElement &find_child(SVG::SVGElementType etype, std::size_t index = 0);
   bool is_closed_shape_element() const;
   bool is_shape_element() const;
   /// Return the outline bounding box of the element. The outline bounding box
