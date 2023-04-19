@@ -967,8 +967,8 @@ void SVG::SVGRect::extend(const SVG::SVGRect &other) {
   height = ymax - ymin;
 }
 
-std::string_view SVG::tag(SVGElementType type) {
-  switch (type) {
+std::string_view SVG::tag(SVGElementType elem_type) {
+  switch (elem_type) {
   case SVG::SVGElementType::Circle:
     return "circle";
   case SVG::SVGElementType::Ellipse:

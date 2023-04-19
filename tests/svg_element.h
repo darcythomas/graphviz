@@ -63,7 +63,7 @@ enum class SVGElementType {
   Title,
 };
 
-std::string_view tag(SVG::SVGElementType type);
+std::string_view tag(SVG::SVGElementType elem_type);
 
 struct SVGAttributes {
   std::string class_;
