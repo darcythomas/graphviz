@@ -151,7 +151,7 @@ void SVGAnalyzer::retrieve_graphviz_components() {
 
 void SVGAnalyzer::retrieve_graphviz_components_impl(
     SVG::SVGElement &svg_element) {
-  if (svg_element.type == SVG::SVGElementType::Group) {
+  if (svg_element.elem_type == SVG::SVGElementType::Group) {
     // The SVG 'class' attribute determines which type of Graphviz element a 'g'
     // element corresponds to
     const auto &class_ = svg_element.attributes.class_;
@@ -255,17 +255,17 @@ void SVGAnalyzer::set_text(std::string_view text) {
   auto &element = current_element();
   element.text = text;
 
-  if (element.type == SVG::SVGElementType::Title) {
+  if (element.elem_type == SVG::SVGElementType::Title) {
     // The title text is normally the 'graph_id', 'node_id' or 'edgeop'
     // according to the DOT language specification. Save it on the parent 'g'
     // element to avoid having to look it up later.
-    if (parent_element().type != SVG::SVGElementType::Group) {
+    if (parent_element().elem_type != SVG::SVGElementType::Group) {
       throw std::runtime_error{"Unexpected parent element of 'title' element"};
     }
     parent_element().graphviz_id = text;
     // If the 'g' element corresponds to the graph, set the Graphviz ID also on
     // the top level 'svg' element.
-    if (grandparent_element().type == SVG::SVGElementType::Svg) {
+    if (grandparent_element().elem_type == SVG::SVGElementType::Svg) {
       grandparent_element().graphviz_id = text;
     }
   }
