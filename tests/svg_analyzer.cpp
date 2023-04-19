@@ -247,8 +247,8 @@ void SVGAnalyzer::set_rx(double rx) { current_element().attributes.rx = rx; }
 
 void SVGAnalyzer::set_ry(double ry) { current_element().attributes.ry = ry; }
 
-void SVGAnalyzer::set_point(std::pair<double, double> point) {
-  current_element().attributes.points.emplace_back(point.first, point.second);
+void SVGAnalyzer::set_point(std::pair<double, double> pt) {
+  current_element().attributes.points.emplace_back(pt.first, pt.second);
 }
 
 void SVGAnalyzer::set_text(std::string_view text) {
