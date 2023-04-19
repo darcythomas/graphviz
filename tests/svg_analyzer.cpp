@@ -129,7 +129,7 @@ SVG::SVGElement &SVGAnalyzer::current_element() {
   return *m_elements_in_process.back();
 }
 
-void SVGAnalyzer::enter_element(SVG::SVGElementType type) {
+void SVGAnalyzer::enter_element(SVG::SVGElementType elem_type) {
   if (m_elements_in_process.empty()) {
     throw std::runtime_error{
         "No element is currently being processed by the SVG++ document "
@@ -137,7 +137,7 @@ void SVGAnalyzer::enter_element(SVG::SVGElementType type) {
         "level 'svg' to be in process"};
   }
   auto &element = current_element();
-  element.children.emplace_back(type);
+  element.children.emplace_back(elem_type);
   m_elements_in_process.push_back(&element.children.back());
 }
 
