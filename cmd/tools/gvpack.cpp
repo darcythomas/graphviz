@@ -391,9 +391,9 @@ using attr_map_t = std::map<std::string, AttributeValue>;
  * objp. If the attribute has already been defined and
  * has a different default, set default to "".
  */
-static void fillDict(attr_map_t &newdict, Agraph_t *g, int kind) {
+static void fillDict(attr_map_t &newdict, Agraph_t *g, int attr_kind) {
 
-  for (Agsym_t *a = agnxtattr(g, kind, 0); a; a = agnxtattr(g, kind, a)) {
+  for (Agsym_t *a = agnxtattr(g, attr_kind, 0); a; a = agnxtattr(g, attr_kind, a)) {
     char *name = a->name;
     char *value = a->defval;
     auto it = newdict.find(name);
