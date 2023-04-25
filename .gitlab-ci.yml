@@ -292,6 +292,18 @@ fedora37-build:
     variables:
       IMAGE: fedora37
 
+fedora38-build:
+    <<: *rpm_build_definition
+    needs:
+        - job: docker_build_fedora38
+          artifacts: false
+        - job: portable-source
+          artifacts: true
+    tags:
+        - linux
+    variables:
+      IMAGE: fedora38
+
 ubuntu-18.04-build:
     <<: *deb_build_definition
     needs:
@@ -860,6 +872,22 @@ fedora37-cmake-build:
     variables:
       IMAGE: fedora37
 
+fedora38-cmake-build:
+    <<: *rpm_build_definition
+    needs:
+        - job: docker_build_fedora38
+          artifacts: false
+    before_script:
+        - export build_system="cmake"
+        # fail on any compiler warnings
+        - export CFLAGS=-Werror
+        - export CXXFLAGS=-Werror
+        - export CMAKE_OPTIONS="-Dwith_smyrna=ON"
+    tags:
+        - linux
+    variables:
+      IMAGE: fedora38
+
 macos-cmake-build:
     <<: *macos_build_definition
     before_script:
@@ -1096,6 +1124,18 @@ fedora37-test:
     variables:
       IMAGE: fedora37
 
+fedora38-test:
+    <<: *linux_test_definition
+    before_script:
+        - export build_system="autotools"
+    needs:
+        - job: "fedora38-build"
+          artifacts: true
+    tags:
+        - linux
+    variables:
+      IMAGE: fedora38
+
 macos-autotools-test:
     <<: *test_definition
     before_script:
@@ -1228,6 +1268,19 @@ fedora37-cmake-test:
         - linux
     variables:
       IMAGE: fedora37
+
+fedora38-cmake-test:
+    <<: *linux_test_definition
+    before_script:
+        - export build_system="cmake"
+        - python3 gen_version.py --output GRAPHVIZ_VERSION
+    needs:
+        - job: "fedora38-cmake-build"
+          artifacts: true
+    tags:
+        - linux
+    variables:
+      IMAGE: fedora38
 
 macos-cmake-test:
     <<: *test_definition
@@ -1378,6 +1431,11 @@ docker_build_fedora37:
   variables:
     IMAGE: fedora37
 
+docker_build_fedora38:
+  <<: *docker_build_definition
+  variables:
+    IMAGE: fedora38
+
 docker_build_ubuntu-18.04:
   <<: *docker_build_definition
   variables:
@@ -1418,6 +1476,13 @@ docker_push_fedora37:
     IMAGE: fedora37
   needs:
     - docker_build_fedora37
+
+docker_push_fedora38:
+  <<: *docker_push_definition
+  variables:
+    IMAGE: fedora38
+  needs:
+    - docker_build_fedora38
 
 docker_push_ubuntu-18.04:
   <<: *docker_push_definition
