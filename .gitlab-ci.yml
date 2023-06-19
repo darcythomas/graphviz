@@ -412,7 +412,7 @@ macos-autotools-build:
         - python3 gen_version.py --output GRAPHVIZ_VERSION # FIXME: remove when building from portable source
         - export build_system="autotools"
     tags:
-        - shared-macos-amd64
+        - saas-macos-medium-m1
 
 # We do the MinGW autotools builds in two steps in separate jobs to
 # get below the one hour per job limit of the GitLab shared Windows
@@ -889,7 +889,7 @@ macos-cmake-build:
         - export CXXFLAGS=-Werror
         - export CMAKE_OPTIONS="-Dwith_cxx_api=ON"
     tags:
-        - shared-macos-amd64
+        - saas-macos-medium-m1
 
 windows-cmake-Win32-release-build:
     <<: *windows_build_definition
@@ -1137,7 +1137,7 @@ macos-autotools-test:
         - job: "macos-autotools-build"
           artifacts: true
     tags:
-        - shared-macos-amd64
+        - saas-macos-medium-m1
     image: macos-12-xcode-14
     # Most submitters don't have access to the macOS runners, and if they try
     # to run macOS pipeline jobs, the jobs will hang forever.  This variable is
@@ -1283,7 +1283,7 @@ macos-cmake-test:
         - job: "macos-cmake-build"
           artifacts: true
     tags:
-        - shared-macos-amd64
+        - saas-macos-medium-m1
     image: macos-12-xcode-14
     # Most submitters don't have access to the macOS runners, and if they try
     # to run macOS pipeline jobs, the jobs will hang forever.  This variable is

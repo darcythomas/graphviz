@@ -18,22 +18,22 @@ brew install gts || brew upgrade gts
 
 # quoting Homebrew:
 #
-#   qt@5 is keg-only, which means it was not symlinked into /usr/local,
+#   qt@5 is keg-only, which means it was not symlinked into /opt/homebrew,
 #   because this is an alternate version of another formula.
 #
 #   If you need to have qt@5 first in your PATH, run:
-#     echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+#     echo 'export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"' >> ~/.zshrc
 #
 #   For compilers to find qt@5 you may need to set:
-#     export LDFLAGS="-L/usr/local/opt/qt@5/lib"
-#     export CPPFLAGS="-I/usr/local/opt/qt@5/include"
+#     export LDFLAGS="-L/opt/homebrew/opt/qt@5/lib"
+#     export CPPFLAGS="-I/opt/homebrew/opt/qt@5/include"
 #
 #   For pkg-config to find qt@5 you may need to set:
-#     export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"
-export PATH="/usr/local/opt/qt@5/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/qt@5/lib"
-export CPPFLAGS="-I/usr/local/opt/qt@5/include"
-export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"
+#     export PKG_CONFIG_PATH="/opt/homebrew/opt/qt@5/lib/pkgconfig"
+export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/qt@5/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/qt@5/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/qt@5/lib/pkgconfig"
 
 brew install librsvg || brew upgrade librsvg
 brew install libxaw || brew upgrade libxaw
