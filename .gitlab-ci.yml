@@ -1128,26 +1128,6 @@ fedora38-test:
     variables:
       IMAGE: fedora38
 
-macos-autotools-test:
-    <<: *test_definition
-    before_script:
-        - source ci/macos-install-runtime-dependencies.sh
-        - export build_system="autotools"
-    needs:
-        - job: "macos-autotools-build"
-          artifacts: true
-    tags:
-        - shared-macos-amd64
-    image: macos-12-xcode-14
-    # Most submitters don't have access to the macOS runners, and if they try
-    # to run macOS pipeline jobs, the jobs will hang forever.  This variable is
-    # only set on repos that have access to macOS runners, in GitLab repo
-    # settings.
-    # https://gitlab.com/graphviz/graphviz/-/settings/ci_cd
-    only:
-        variables:
-          - $ENABLE_GRAPHVIZ_MACOS_CI
-
 ubuntu-20.04-cmake-test:
     <<: *linux_test_definition
     before_script:
@@ -1272,27 +1252,6 @@ fedora38-cmake-test:
         - linux
     variables:
       IMAGE: fedora38
-
-macos-cmake-test:
-    <<: *test_definition
-    before_script:
-        - source ci/macos-install-runtime-dependencies.sh
-        - export build_system="cmake"
-        - python3 gen_version.py --output GRAPHVIZ_VERSION
-    needs:
-        - job: "macos-cmake-build"
-          artifacts: true
-    tags:
-        - shared-macos-amd64
-    image: macos-12-xcode-14
-    # Most submitters don't have access to the macOS runners, and if they try
-    # to run macOS pipeline jobs, the jobs will hang forever.  This variable is
-    # only set on repos that have access to macOS runners, in GitLab repo
-    # settings.
-    # https://gitlab.com/graphviz/graphviz/-/settings/ci_cd
-    only:
-        variables:
-          - $ENABLE_GRAPHVIZ_MACOS_CI
 
 windows-mingw32-cmake-test:
     script:
