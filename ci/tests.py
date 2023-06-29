@@ -130,6 +130,10 @@ def test_existence(binary: str):
         check_that_tool_does_not_exist(binary, os_id)
         pytest.skip(f"{binary} is not installed on Windows")
 
+    if binary == "smyrna" and not is_cmake() and is_macos():
+        check_that_tool_does_not_exist(binary, os_id)
+        pytest.skip("https://gitlab.com/graphviz/graphviz/-/issues/2422")
+
     if binary == "vimdot" and not is_cmake() and is_macos():
         check_that_tool_does_not_exist(binary, os_id)
         pytest.skip("https://gitlab.com/graphviz/graphviz/-/issues/2423")
